@@ -1,0 +1,246 @@
+.livePage {
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.liveHeader {
+  margin-bottom: 30px;
+}
+
+.liveHeader h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 6px;
+}
+
+.cameraPreviewCard {
+  padding: 24px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cameraFeedBox {
+  width: 100%;
+  max-width: 800px;
+  height: 450px;
+  background: #090d16;
+  border-radius: 18px;
+  border: 2px solid rgba(56, 189, 248, 0.3);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.videoElement {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.cameraNotice {
+  text-align: center;
+  color: #cbd5e1;
+  padding: 20px;
+}
+
+.noticeIcon {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+}
+
+.cameraNotice h3 {
+  color: #38bdf8;
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+}
+
+.cameraNotice p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.cameraControlButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.stopBtn {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.stopBtn:hover {
+  background: rgba(244, 63, 94, 0.4);
+  color: #ffffff;
+}
+
+.liveResultsSection {
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.resultsSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.resultsSectionHeader h2 {
+  color: #f8fafc;
+  font-size: 1.4rem;
+}
+
+.liveMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metricBox {
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metricBox span {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+.metricBox h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.recommendationsCard {
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 14px;
+}
+
+.recommendationsCard h3 {
+  color: #38bdf8;
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+
+.diagnosisText {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.recList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #f8fafc;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bulletCheck {
+  color: #34d399;
+  font-weight: 800;
+}
+
+.aiProcessingSection {
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.aiProcessingSection h2 {
+  color: #f8fafc;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.aiModulesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.moduleCard {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moduleHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.moduleHeader h4 {
+  color: #38bdf8;
+  font-size: 1rem;
+}
+
+.checkBadge {
+  color: #34d399;
+  font-weight: 800;
+}
+
+.moduleCard p {
+  color: #94a3b8;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.instructionsCard {
+  padding: 30px;
+}
+
+.instructionsCard h2 {
+  color: #f8fafc;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+
+.instructionsList {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
