@@ -1,0 +1,152 @@
+.recommendations-container {
+  background: rgba(26, 31, 46, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  margin-bottom: 24px;
+}
+
+.rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.medical-alert-badge {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #f87171;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.rec-summary {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.rec-section {
+  margin-bottom: 22px;
+}
+
+.rec-subtitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 12px;
+}
+
+.protocol-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.protocol-item {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+.proto-bullet {
+  color: #6366f1;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.exercise-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.exercise-card.completed {
+  opacity: 0.6;
+  border-color: #10b981;
+}
+
+.ex-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.ex-name {
+  font-weight: 700;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+}
+
+.check-btn {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #818cf8;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.exercise-card.completed .check-btn {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #34d399;
+}
+
+.ex-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.ex-sets {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.ex-target {
+  color: #94a3b8;
+}
+
+.ex-purpose {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.cue-box {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cue-item {
+  font-size: 0.9rem;
+  color: #c7d2fe;
+}

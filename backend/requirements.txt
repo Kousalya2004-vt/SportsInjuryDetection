@@ -1,0 +1,10 @@
+Flask
+flask-cors
+mysql-connector-python
+opencv-python
+mediapipe
+numpy
+pandas
+joblib
+xgboost
+reportlab
