@@ -1,0 +1,27 @@
+[
+  {
+    "id": "8538f6b6-481c-4068-8002-7a6b8901e6d8",
+    "video_name": "6573047-uhd_3840_2160_25fps.mp4",
+    "athlete_name": "Kousalya Venkata Sai Lakshmi",
+    "sport": "running",
+    "probability": 44,
+    "confidence": "100%",
+    "risk_level": "Moderate",
+    "created_at": "8/14/2026, 12:15:27 PM",
+    "summary": "Practice hard drills early: Do fast running and jumping drills at the start of training when your legs are fresh and not tired.",
+    "movement_quality": 29,
+    "biomechanics": 79,
+    "fatigue_risk": 95,
+    "athlete_health": 56,
+    "duration": "8.6s",
+    "resolution": "3840x2160",
+    "frame_rate": "25.0 fps",
+    "frames_analyzed": 107,
+    "recommendations": [
+      "[MEDIUM] Practice hard drills early — Do fast running, jumping, and cutting drills at the start of your training when your legs are fresh and full of energy.",
+      "[HIGH] Rest and drink plenty of water — Your body showed fatigue near the end of your run. Get 7 to 9 hours of sleep every night, drink water, and lower heavy training by 10-15% this week.",
+      "[HIGH] Strengthen hips and legs — Your knees bend inward slightly when moving. Do side band walks, leg lifts, and glute bridges 3 times a week to keep your hips strong.",
+      "[HIGH] Practice soft one-leg landings — Practice landing softly on one leg while keeping your knee straight over your toes to prevent your knee from twisting."
+    ]
+  }
+]

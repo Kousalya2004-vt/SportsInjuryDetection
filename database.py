@@ -16,7 +16,7 @@ try:
         database=DB_NAME
     )
     if connection.is_connected():
-        print("✅ MySQL Database Connected Successfully to", DB_NAME)
+        print("[SUCCESS] MySQL Database Connected Successfully to", DB_NAME)
 except Exception as err:
-    print("⚠️ MySQL Connection Notice:", err)
-    print("ℹ️ Backend running with fallback local storage support.")
+    print("[NOTICE] MySQL Connection Notice:", err)
+    print("[INFO] Backend running with fallback local storage support.")

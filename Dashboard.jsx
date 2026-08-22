@@ -1,420 +1,197 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const fileRef = useRef(null);
 
-  const [loading, setLoading] = useState(false);
-
-  const [athlete, setAthlete] = useState(null);
-
-  const [dashboard, setDashboard] = useState({
-    totalVideos: 0,
-    totalReports: 0,
-    lastRisk: 0,
-    lastBodyPart: "-"
+  const [user, setUser] = useState({
+    firstName: "Kousalya",
+    fullName: "Kousalya Venkata Sai Lakshmi",
+    sport: "Running",
+    role: "ATHLETE",
   });
 
-  const [result, setResult] = useState({
-    risk: "",
-    percentage: "",
-    confidence: "",
-    severity: "",
-    bodyPart: "",
-    reason: "",
-    recommendation: [],
-    biomechanics: "",
-    stability: "",
-    balance: "",
-    kneeAngle: "",
-    hipAngle: "",
-    ankleAngle: "",
-    shoulderAngle: "",
-    elbowAngle: "",
-    timeline: [],
-    image: ""
+  const [stats, setStats] = useState({
+    total_analyses: 1,
+    this_week: 1,
+    highest_risk: 44,
+    most_common_risk: "Moderate",
+  });
+
+  const [latestAnalysis, setLatestAnalysis] = useState({
+    probability: 44,
+    risk_level: "Moderate Risk",
+    activity: "Running",
+    biomechanics: 79,
+    fatigue_risk: 95,
+    confidence: "100%",
+    video_name: "6573047-uhd_3840_2160_25fps.mp4",
   });
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/profile")
+    // Fetch profile
+    fetch("http://127.0.0.1:5000/api/user/profile")
       .then((res) => res.json())
-      .then((data) => setAthlete(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        if (data && data.name) {
+          const first = data.name.trim().split(" ")[0];
+          setUser((prev) => ({
+            ...prev,
+            firstName: first,
+            fullName: data.name,
+            role: (data.role || "ATHLETE").toUpperCase(),
+          }));
+        }
+      })
+      .catch(() => {
+        const savedName = localStorage.getItem("user_name");
+        if (savedName) {
+          setUser((prev) => ({
+            ...prev,
+            firstName: savedName.trim().split(" ")[0],
+            fullName: savedName,
+          }));
+        }
+      });
 
-    fetch("http://127.0.0.1:5000/dashboard")
+    // Check active athlete profile
+    const savedAth = localStorage.getItem("athlete_profile");
+    if (savedAth) {
+      try {
+        const parsed = JSON.parse(savedAth);
+        if (parsed.name) {
+          setUser((prev) => ({
+            ...prev,
+            fullName: parsed.name,
+            firstName: parsed.name.trim().split(" ")[0],
+            sport: parsed.sport || "Running",
+          }));
+        }
+      } catch (e) {}
+    }
+
+    // Fetch history and latest analysis
+    fetch("http://127.0.0.1:5000/api/history")
       .then((res) => res.json())
-      .then((data) => setDashboard(data))
+      .then((data) => {
+        if (data.stats) setStats(data.stats);
+        if (data.items && data.items.length > 0) {
+          const latest = data.items[0];
+          setLatestAnalysis({
+            probability: latest.probability || 44,
+            risk_level: latest.risk_level ? `${latest.risk_level} Risk` : "Moderate Risk",
+            activity: latest.sport || "Running",
+            biomechanics: latest.biomechanics || 79,
+            fatigue_risk: latest.fatigue_risk || 95,
+            confidence: latest.confidence || "100%",
+            video_name: latest.video_name || "6573047-uhd_3840_2160_25fps.mp4",
+          });
+        }
+      })
       .catch(() => {});
   }, []);
 
-  const openUpload = () => {
-    fileRef.current.click();
-  };
-
-  const uploadVideo = async (e) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("video", file);
-
-    setLoading(true);
-
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:5000/upload_video",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-
-      setResult({
-        risk: data.risk,
-        percentage: data.percentage,
-        confidence: data.confidence,
-        severity: data.severity,
-        bodyPart: data.bodyPart,
-        reason: data.reason,
-        recommendation: data.recommendation || [],
-        biomechanics: data.biomechanics,
-        stability: data.stability,
-        balance: data.balance,
-        kneeAngle: data.kneeAngle,
-        hipAngle: data.hipAngle,
-        ankleAngle: data.ankleAngle,
-        shoulderAngle: data.shoulderAngle,
-        elbowAngle: data.elbowAngle,
-        timeline: data.timeline || [],
-        image: data.image,
-      });
-
-      setDashboard((prev) => ({
-        totalVideos: prev.totalVideos + 1,
-        totalReports: prev.totalReports + 1,
-        lastRisk: data.percentage,
-        lastBodyPart: data.bodyPart,
-      }));
-
-    } catch (err) {
-      alert("Server Error");
-    }
-
-    setLoading(false);
-  };
-
-  const downloadReport = () => {
-    window.open("http://127.0.0.1:5000/report", "_blank");
-  };
-
-  const logout = () => {
-    alert("Logged Out Successfully");
-    navigate("/");
-  };
-
   return (
-    <div className="dashboard">
-
-  {/* Sidebar */}
-
-  <div className="sidebar">
-
-    <h2>KinetIQ AI</h2>
-
-    <button onClick={() => navigate("/profile")}>
-      👤 Athlete Profile
-    </button>
-
-    <button onClick={openUpload}>
-      📤 Upload Video
-    </button>
-
-    <button onClick={() => navigate("/live")}>
-      📹 Live Camera
-    </button>
-
-    <button onClick={downloadReport}>
-      📄 Download Report
-    </button>
-
-    <button onClick={logout}>
-      🚪 Logout
-    </button>
-
-    <input
-      type="file"
-      accept="video/*"
-      ref={fileRef}
-      style={{ display: "none" }}
-      onChange={uploadVideo}
-    />
-
-  </div>
-
-  {/* Main Content */}
-
-  <div className="main-content">
-
-    <h1>🏃 AI Sports Injury Detection Dashboard</h1>
-
-    <div className="summary-grid">
-
-      <div className="summary-card">
-        <h3>Total Videos</h3>
-        <h2>{dashboard.totalVideos}</h2>
+    <div className="dashboardPage fade-in">
+      <div className="dashboardWelcomeHeader">
+        <h1>Welcome back, {user.firstName}</h1>
+        <p className="subtitle">
+          Upload your movement videos and track your injury risk history over time.
+        </p>
       </div>
 
-      <div className="summary-card">
-        <h3>Total Reports</h3>
-        <h2>{dashboard.totalReports}</h2>
+      {/* Side-by-Side Main Grid: Movement Analysis + Athlete Risk Intelligence */}
+      <div className="sideBySideContainer">
+        {/* Left Column: Movement Analysis Action Card */}
+        <div className="movementAnalysisSideCard">
+          <div className="cardTitleRow">
+            <div className="iconBadge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Movement Analysis</h3>
+              <p>Upload a clip and run the risk pipeline.</p>
+            </div>
+          </div>
+
+          <div className="actionButtonsGrid">
+            <button className="primaryActionBtn" onClick={() => navigate("/upload")}>
+              📤 Upload Video for Analysis ➔
+            </button>
+            <div className="secondaryActionRow">
+              <button className="secondaryActionBtn" onClick={() => navigate("/live")}>
+                📹 Live Camera
+              </button>
+              <button className="secondaryActionBtn" onClick={() => navigate("/injury-prediction")}>
+                🧠 Injury Intelligence
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Athlete Risk Overview (with user name and risk) */}
+        <div className="athleteRiskOverviewSideCard">
+          <div className="overviewHeader">
+            <div>
+              <span className="athleteTag">ATHLETE RISK ANALYSIS</span>
+              <h2>{user.fullName}</h2>
+            </div>
+            <span className="riskBadgeModerate">{latestAnalysis.risk_level}</span>
+          </div>
+
+          <div className="riskScoreRow">
+            <div className="bigRiskScore">
+              <span className="num">{latestAnalysis.probability}</span>
+              <span className="denom">/ 100 Risk Score</span>
+            </div>
+
+            <div className="subMetricsPills">
+              <div className="sPill">
+                <span className="lbl">BIOMECH. EFFICIENCY</span>
+                <span className="val">{latestAnalysis.biomechanics}%</span>
+              </div>
+              <div className="sPill">
+                <span className="lbl">FATIGUE RISK</span>
+                <span className="val">{latestAnalysis.fatigue_risk}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="overviewFooterRow">
+            <span className="fileInfo">Activity: <strong>{user.sport}</strong> · Clip: {latestAnalysis.video_name}</span>
+            <button className="historyLinkBtn" onClick={() => navigate("/history")}>
+              View History ➔
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className="summary-card">
-        <h3>Current Risk</h3>
-        <h2>{dashboard.lastRisk}%</h2>
-      </div>
+      {/* Stats Summary Cards Row Side by Side */}
+      <div className="dashboardSummaryGrid">
+        <div className="summaryCard" onClick={() => navigate("/history")}>
+          <span className="summaryLabel">TOTAL ANALYSES</span>
+          <span className="summaryVal">{stats.total_analyses}</span>
+        </div>
 
-      <div className="summary-card">
-        <h3>Detected Body Part</h3>
-        <h2>{dashboard.lastBodyPart}</h2>
-      </div>
+        <div className="summaryCard" onClick={() => navigate("/history")}>
+          <span className="summaryLabel">THIS WEEK</span>
+          <span className="summaryVal">{stats.this_week}</span>
+        </div>
 
+        <div className="summaryCard" onClick={() => navigate("/history")}>
+          <span className="summaryLabel">HIGHEST RISK</span>
+          <span className="summaryVal">{stats.highest_risk}</span>
+        </div>
+
+        <div className="summaryCard" onClick={() => navigate("/history")}>
+          <span className="summaryLabel">MOST COMMON RISK</span>
+          <span className="summaryVal">{stats.most_common_risk}</span>
+        </div>
+      </div>
     </div>
-
-    {/* Athlete Profile */}
-
-    {athlete && (
-
-      <div className="profile-card">
-
-        <div className="profile-header">
-
-          <img
-            src={
-              athlete.photo
-                ? `http://127.0.0.1:5000/${athlete.photo}`
-                : "/profile.png"
-            }
-            alt="Athlete"
-            className="profile-image"
-          />
-
-          <div>
-            <h2>{athlete.name}</h2>
-            <p>{athlete.sport}</p>
-          </div>
-
-        </div>
-
-        <div className="profile-grid">
-
-          <p><b>Athlete ID:</b> {athlete.athleteId}</p>
-          <p><b>Age:</b> {athlete.age}</p>
-          <p><b>Gender:</b> {athlete.gender}</p>
-          <p><b>Blood Group:</b> {athlete.blood}</p>
-          <p><b>Sport:</b> {athlete.sport}</p>
-          <p><b>Position:</b> {athlete.position}</p>
-          <p><b>Coach:</b> {athlete.coachName}</p>
-          <p><b>Coach Mobile:</b> {athlete.coachMobile}</p>
-          <p><b>Height:</b> {athlete.height} cm</p>
-          <p><b>Weight:</b> {athlete.weight} kg</p>
-          <p><b>Training Load:</b> {athlete.trainingLoad}</p>
-          <p><b>Previous Injury:</b> {athlete.injury}</p>
-
-        </div>
-
-      </div>
-
-    )}
-        {/* AI Status */}
-
-    <div className="status-card">
-      <h2>AI Status</h2>
-
-      <p>✅ Flask Server Connected</p>
-      <p>✅ MediaPipe Pose Detection Ready</p>
-      <p>✅ AI Prediction Model Loaded</p>
-      <p>✅ PDF Report Generator Ready</p>
-    </div>
-
-    {/* Loading */}
-
-    {loading && (
-      <div className="loading">
-        <h2>Analyzing Athlete Movement...</h2>
-        <p>Please wait while AI processes the uploaded video.</p>
-      </div>
-    )}
-
-    {/* Prediction Result */}
-
-    {!loading && result.risk && (
-
-      <div className="prediction-card">
-
-        <h2>AI Injury Prediction</h2>
-
-        <p><strong>Injury Risk:</strong> {result.risk}</p>
-
-        <p><strong>Risk Percentage:</strong> {result.percentage}%</p>
-
-        <p><strong>Confidence:</strong> {result.confidence}%</p>
-
-        <p><strong>Severity:</strong> {result.severity}</p>
-
-        <p><strong>Detected Body Part:</strong> {result.bodyPart}</p>
-
-        <p><strong>Reason:</strong> {result.reason}</p>
-
-        <h3>Recommendations</h3>
-
-        <ul>
-          {Array.isArray(result.recommendation)
-            ? result.recommendation.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))
-            : null}
-        </ul>
-                {/* Performance Scores */}
-
-        <div className="score-grid">
-
-          <div className="score-card">
-            <h3>Biomechanics</h3>
-            <p>{result.biomechanics}/100</p>
-          </div>
-
-          <div className="score-card">
-            <h3>Stability</h3>
-            <p>{result.stability}/100</p>
-          </div>
-
-          <div className="score-card">
-            <h3>Balance</h3>
-            <p>{result.balance}/100</p>
-          </div>
-
-        </div>
-
-        {/* Joint Angles */}
-
-        <div className="joint-grid">
-
-          <div className="joint-card">
-            <h3>Knee Angle</h3>
-            <p>{result.kneeAngle}°</p>
-          </div>
-
-          <div className="joint-card">
-            <h3>Hip Angle</h3>
-            <p>{result.hipAngle}°</p>
-          </div>
-
-          <div className="joint-card">
-            <h3>Ankle Angle</h3>
-            <p>{result.ankleAngle}°</p>
-          </div>
-
-          <div className="joint-card">
-            <h3>Shoulder Angle</h3>
-            <p>{result.shoulderAngle}°</p>
-          </div>
-
-          <div className="joint-card">
-            <h3>Elbow Angle</h3>
-            <p>{result.elbowAngle}°</p>
-          </div>
-
-        </div>
-
-        {/* Heatmap */}
-
-        {result.image && (
-
-          <div className="heatmap-section">
-
-            <h3>Pose Detection Result</h3>
-
-            <img
-              src={`http://127.0.0.1:5000/${result.image}`}
-              alt="Heatmap"
-              className="heatmap-image"
-            />
-
-          </div>
-
-        )}
-
-        {/* Timeline */}
-
-        {result.timeline.length > 0 && (
-
-          <div className="timeline-section">
-
-            <h3>Risk Timeline</h3>
-
-            <table>
-
-              <thead>
-
-                <tr>
-                  <th>Time</th>
-                  <th>Risk</th>
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {result.timeline.map((item, index) => (
-
-                  <tr key={index}>
-                    <td>{item.time}</td>
-                    <td>{item.level}</td>
-                  </tr>
-
-                ))}
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-        )}
-                {/* Action Buttons */}
-
-        <div className="action-buttons">
-
-          <button
-            className="analyze-btn"
-            onClick={openUpload}
-          >
-            Analyze Another Video
-          </button>
-
-          <button
-            className="report-btn"
-            onClick={downloadReport}
-          >
-            Download PDF Report
-          </button>
-
-        </div>
-
-      </div>
-
-    )}
-
-  </div>
-
-</div>
-
   );
 }
 

@@ -96,23 +96,33 @@
   font-size: 0.88rem;
 }
 
-.athleteMetricsPill {
+.athleteBiometricsBar {
   display: flex;
-  gap: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 10px 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 0.88rem;
-  color: #cbd5e1;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   flex-wrap: wrap;
 }
 
-.athleteMetricsPill strong {
-  color: #38bdf8;
+.bioTag {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bioTag span {
+  color: #94a3b8;
+  font-weight: 700;
 }
 
 .uploadCardContainer {
+
   padding: 28px;
   margin-bottom: 40px;
 }
@@ -366,4 +376,104 @@
   justify-content: center;
   flex-shrink: 0;
   font-size: 0.8rem;
+}
+
+/* ============================================================
+   VIDEO RESULT & METRICS DISPLAY GRID (MATCHING IMAGE 1)
+   ============================================================ */
+.videoResultCard {
+  padding: 24px;
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+.videoResultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.videoResultTitle {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.badge-completed {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.videoFrameViewer {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto 16px;
+  background: #000000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.annotatedFrameImg {
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  display: block;
+}
+
+.videoCaptionNotes {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.metrics6Grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.metricCardBox {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metricCardLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.metricCardVal {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
 }
