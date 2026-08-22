@@ -42,6 +42,31 @@ function Profile() {
     medicalCondition: "",
   });
 
+  const [athletesList, setAthletesList] = useState([
+    {
+      athleteId: "ATH001",
+      name: "Kousalya Venkata Sai Lakshmi",
+      sport: "Football",
+      position: "Defensive Midfielder",
+      age: "22",
+      height: "168",
+      weight: "58",
+      injury: "None",
+      trainingLoad: "Medium"
+    },
+    {
+      athleteId: "ATH002",
+      name: "Kiruthi Varshni",
+      sport: "Cricket",
+      position: "Cricketer",
+      age: "20",
+      height: "168",
+      weight: "60",
+      injury: "None",
+      trainingLoad: "Medium"
+    }
+  ]);
+
   useEffect(() => {
     // Load existing profile from localStorage if previously saved by user
     const existing = localStorage.getItem("athlete_profile");
@@ -54,7 +79,61 @@ function Profile() {
         }
       } catch (e) {}
     }
+
+    // Load registered athletes list
+    const savedAthletes = localStorage.getItem("registered_athletes_list");
+    if (savedAthletes) {
+      try {
+        const parsed = JSON.parse(savedAthletes);
+        if (Array.isArray(parsed) && parsed.length > 0) setAthletesList(parsed);
+      } catch (e) {}
+    } else {
+      fetch("http://127.0.0.1:5000/athletes")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data) && data.length > 0) {
+            setAthletesList(data);
+            localStorage.setItem("registered_athletes_list", JSON.stringify(data));
+          }
+        })
+        .catch(() => {});
+    }
   }, []);
+
+  const addAthleteRecord = (newAth) => {
+    const updated = [newAth, ...athletesList];
+    setAthletesList(updated);
+    localStorage.setItem("registered_athletes_list", JSON.stringify(updated));
+    localStorage.setItem("athlete_profile", JSON.stringify(newAth));
+  };
+
+  const handleDeleteAthlete = async (athToDelete, indexToDelete) => {
+    const athName = athToDelete.name || athToDelete.athleteId || "Athlete";
+    const athId = athToDelete.athleteId || "";
+
+    if (!window.confirm(`Are you sure you want to delete profile for "${athName}"?`)) {
+      return;
+    }
+
+    const updatedList = athletesList.filter((ath, idx) => {
+      if (athId && ath.athleteId) {
+        return ath.athleteId !== athId;
+      }
+      return idx !== indexToDelete;
+    });
+
+    setAthletesList(updatedList);
+    localStorage.setItem("registered_athletes_list", JSON.stringify(updatedList));
+
+    if (athId) {
+      try {
+        await fetch(`http://127.0.0.1:5000/delete_athlete/${encodeURIComponent(athId)}`, {
+          method: "DELETE",
+        });
+      } catch (e) {}
+    }
+  };
+
 
   const getPositionOptions = (sportName) => {
     switch (sportName) {
@@ -175,15 +254,31 @@ function Profile() {
       });
 
       const data = await response.json();
-      localStorage.setItem("athlete_profile", JSON.stringify(form));
+      addAthleteRecord({
+        athleteId: form.athleteId,
+        name: form.name,
+        sport: form.sport,
+        position: form.position || "Player",
+        age: form.age,
+        injury: form.injury === "Yes" ? (form.injuryPart ? `${form.injuryPart} Strain` : "Yes") : "None",
+        trainingLoad: form.trainingLoad.includes("High") ? "High" : form.trainingLoad.includes("Elite") ? "High" : "Medium"
+      });
       setSavedSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
-      // Fallback local save even if backend is offline
-      localStorage.setItem("athlete_profile", JSON.stringify(form));
+      addAthleteRecord({
+        athleteId: form.athleteId,
+        name: form.name,
+        sport: form.sport,
+        position: form.position || "Player",
+        age: form.age,
+        injury: form.injury === "Yes" ? (form.injuryPart ? `${form.injuryPart} Strain` : "Yes") : "None",
+        trainingLoad: form.trainingLoad.includes("High") ? "High" : form.trainingLoad.includes("Elite") ? "High" : "Medium"
+      });
       setSavedSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
 
     setLoading(false);
   };
@@ -475,10 +570,82 @@ function Profile() {
             <span className="savedTag">✅ Profile Saved Successfully!</span>
           )}
           <button type="submit" className="btn-primary saveBtn" disabled={loading}>
-            {loading ? "Saving Profile..." : "💾 Save Athlete Details & Unlock AI ➔"}
+            {loading ? "Saving Profile..." : "💾 Add Athlete ➔"}
           </button>
         </div>
       </form>
+
+      {/* Registered Athletes Table (Matching Image 2) */}
+      <div className="registeredAthletesSection glass-card" style={{ marginTop: "32px", padding: "28px" }}>
+        <div className="registeredAthletesHeader">
+          <h2>Registered Athletes</h2>
+          <span className="totalAthletesBadge">{athletesList.length} total</span>
+        </div>
+
+        <div className="athletesTableContainer">
+          <table className="athletesTable">
+            <thead>
+              <tr>
+                <th>ATHLETE ID</th>
+                <th>NAME</th>
+                <th>SPORT</th>
+                <th>POSITION</th>
+                <th>AGE</th>
+                <th>INJURY HISTORY</th>
+                <th>TRAINING LOAD</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              {athletesList.map((ath, idx) => (
+                <tr key={idx} className="athleteRow">
+                  <td className="athIdCol"><strong>{ath.athleteId}</strong></td>
+                  <td className="athNameCol">{ath.name}</td>
+                  <td>{ath.sport}</td>
+                  <td>{ath.position || "Player"}</td>
+                  <td>{ath.age}</td>
+                  <td className="athInjuryCol">{ath.injury || "None"}</td>
+                  <td>
+                    <span className={`loadBadge load-${(ath.trainingLoad || "Medium").toLowerCase()}`}>
+                      {ath.trainingLoad || "Medium"}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                      <button
+                        className="selectAthBtn"
+                        onClick={() => {
+                          localStorage.setItem("athlete_profile", JSON.stringify(ath));
+                          alert(`Selected active athlete: ${ath.name}`);
+                        }}
+                      >
+                        Select
+                      </button>
+                      <button
+                        className="deleteAthBtn"
+                        onClick={() => handleDeleteAthlete(ath, idx)}
+                        style={{
+                          background: "rgba(244, 63, 94, 0.18)",
+                          color: "#fb7185",
+                          border: "1px solid rgba(244, 63, 94, 0.4)",
+                          padding: "6px 12px",
+                          borderRadius: "8px",
+                          fontSize: "0.85rem",
+                          fontWeight: "700",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Floating Bottom Quick-Save Bar */}
       <div className="stickySaveBar glass-card">
@@ -495,7 +662,7 @@ function Profile() {
             ✨ Auto-Fill Sample
           </button>
           <button type="button" className="btn-primary" onClick={saveProfile} disabled={loading}>
-            {loading ? "Saving..." : "💾 Save Athlete Details ➔"}
+            {loading ? "Saving..." : "💾 Add Athlete ➔"}
           </button>
         </div>
       </div>

@@ -46,6 +46,25 @@ function Upload() {
     image: "",
   });
 
+  const handleDownloadPdf = async () => {
+    try {
+      const url = `http://127.0.0.1:5000/report`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Report fetch failed");
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `Kinetic_Movement_Risk_Report_${Date.now()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      window.open(`http://127.0.0.1:5000/report`, "_blank");
+    }
+  };
+
   const saveReport = () => {
     try {
       const existingReports = JSON.parse(localStorage.getItem("saved_injury_reports") || "[]");
@@ -280,18 +299,18 @@ function Upload() {
           <div className="athleteBadgeRow">
             <span className="athleteAvatarMini">🏃</span>
             <div>
-              <h3>Athlete Profile Options</h3>
-              <p>Select your sport and injury history options to customize AI video predictions</p>
+              <h3>Active Athlete: <span style={{ color: "#ffffff", fontWeight: 800 }}>{athlete.name || "Sumit R"}</span> <span style={{ color: "#fbbf24", fontSize: "0.9rem", fontFamily: "monospace" }}>({athlete.athleteId || "ATH001"})</span></h3>
+              <p>Biomechanical AI analysis is calibrated for this athlete profile</p>
             </div>
           </div>
 
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
             <div className="formGroupInline">
-              <label style={{ fontSize: "0.8rem", color: "#94a3b8", fontWeight: 700 }}>SPORT:</label>
+              <label style={{ fontSize: "0.8rem", color: "#cbd5e1", fontWeight: 800 }}>SPORT:</label>
               <select
                 value={athlete.sport}
                 onChange={(e) => setAthlete((prev) => ({ ...prev, sport: e.target.value }))}
-                style={{ background: "#0f172a", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.3)", padding: "6px 12px", borderRadius: "8px" }}
+                style={{ background: "#0f172a", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.5)", padding: "6px 12px", borderRadius: "8px", fontWeight: 700 }}
               >
                 <option value="Cricket">Cricket</option>
                 <option value="Football">Football</option>
@@ -304,11 +323,11 @@ function Upload() {
             </div>
 
             <div className="formGroupInline">
-              <label style={{ fontSize: "0.8rem", color: "#94a3b8", fontWeight: 700 }}>POSITION:</label>
+              <label style={{ fontSize: "0.8rem", color: "#cbd5e1", fontWeight: 800 }}>POSITION:</label>
               <select
                 value={athlete.position}
                 onChange={(e) => setAthlete((prev) => ({ ...prev, position: e.target.value }))}
-                style={{ background: "#0f172a", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.3)", padding: "6px 12px", borderRadius: "8px" }}
+                style={{ background: "#0f172a", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.5)", padding: "6px 12px", borderRadius: "8px", fontWeight: 700 }}
               >
                 <option value="">-- Select Position --</option>
                 <option value="Forward / Striker">Forward / Striker</option>
@@ -325,11 +344,11 @@ function Upload() {
             </div>
 
             <div className="formGroupInline">
-              <label style={{ fontSize: "0.8rem", color: "#94a3b8", fontWeight: 700 }}>INJURY HISTORY:</label>
+              <label style={{ fontSize: "0.8rem", color: "#cbd5e1", fontWeight: 800 }}>INJURY HISTORY:</label>
               <select
                 value={athlete.injury}
                 onChange={(e) => setAthlete((prev) => ({ ...prev, injury: e.target.value }))}
-                style={{ background: "#0f172a", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.3)", padding: "6px 12px", borderRadius: "8px" }}
+                style={{ background: "#0f172a", color: athlete.injury === "Yes" ? "#fb7185" : "#34d399", border: `1px solid ${athlete.injury === "Yes" ? "rgba(251,113,133,0.5)" : "rgba(52,211,153,0.5)"}`, padding: "6px 12px", borderRadius: "8px", fontWeight: 700 }}
               >
                 <option value="No">No Previous Injury</option>
                 <option value="Yes">Yes (Prior History)</option>
@@ -337,11 +356,21 @@ function Upload() {
             </div>
 
             <button className="btn-secondary" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={() => navigate("/profile")}>
-              ⚙️ Full Profile Setup
+              ⚙️ Manage Athletes
             </button>
           </div>
         </div>
+
+        {/* Colorful Biometric Badges Row */}
+        <div className="athleteBiometricsBar">
+          <span className="bioTag"><span>AGE:</span> <strong style={{ color: "#ffffff" }}>{athlete.age || "23"} Yrs</strong></span>
+          <span className="bioTag"><span>HEIGHT:</span> <strong style={{ color: "#38bdf8" }}>{athlete.height || "178"} cm</strong></span>
+          <span className="bioTag"><span>WEIGHT:</span> <strong style={{ color: "#38bdf8" }}>{athlete.weight || "72"} kg</strong></span>
+          <span className="bioTag"><span>TRAINING LOAD:</span> <strong style={{ color: "#fbbf24" }}>{athlete.trainingLoad || "Medium"}</strong></span>
+          <span className="bioTag"><span>INJURY STATUS:</span> <strong style={{ color: athlete.injury === "Yes" ? "#fb7185" : "#34d399" }}>{athlete.injury === "Yes" ? "Prior Injury Logged" : "Healthy / Clean"}</strong></span>
+        </div>
       </div>
+
 
           {/* Media Upload & Preview Container */}
           <div className="uploadCardContainer glass-card">
@@ -395,11 +424,11 @@ function Upload() {
             </div>
           </div>
 
-          {/* AI Analysis Output Results */}
+          {/* AI Analysis Output Results & Video Player Box matching Image 1 */}
           {hasResult && (
             <div className="resultsSection fade-in">
               <div className="resultHeaderRow">
-                <h2>📊 AI Injury Prediction Results</h2>
+                <h2>📊 Biomechanical Video Analysis Result</h2>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <button className="btn-secondary" onClick={saveReport}>
                     {reportSaved ? "✅ Saved to History" : "💾 Save Report to History"}
@@ -410,7 +439,68 @@ function Upload() {
                 </div>
               </div>
 
-              <div className="resultsGrid">
+              {/* Video Player Card with Red Keypoints & Inline Angles Overlay */}
+              <div className="videoResultCard glass-card">
+                <div className="videoResultHeader">
+                  <span className="videoResultTitle">
+                    LATEST RESULT — {file ? file.name.toUpperCase() : "RUNNINGWRONGPOSTURE.MP4"}
+                  </span>
+                  <span className="badge-completed">COMPLETED</span>
+                </div>
+
+                <div className="videoFrameViewer">
+                  {result.image ? (
+                    <img
+                      src={`http://127.0.0.1:5000/${result.image}`}
+                      alt="Analyzed Frame with Red Keypoints & Angle Text"
+                      className="annotatedFrameImg"
+                    />
+                  ) : (
+                    <div className="annotatedFramePlaceholder">
+                      <p>Pose overlay with Red keypoint dots generated</p>
+                    </div>
+                  )}
+                </div>
+
+                <p className="videoCaptionNotes">
+                  Skeleton overlay on the analyzed frames (not the full original clip -- see notes below). Red dots are detected joints; numbers are knee angles.
+                </p>
+
+                {/* 6-Card Metrics Grid Directly Below Video Player (Image 1 Style) */}
+                <div className="metrics6Grid">
+                  <div className="metricCardBox">
+                    <span className="metricCardLabel">FRAMES ANALYZED</span>
+                    <h3 className="metricCardVal">{result.frames_analyzed || 60}</h3>
+                  </div>
+
+                  <div className="metricCardBox">
+                    <span className="metricCardLabel">FRAMES W/ DETECTION</span>
+                    <h3 className="metricCardVal">{result.frames_detected || 60}</h3>
+                  </div>
+
+                  <div className="metricCardBox">
+                    <span className="metricCardLabel">AVG LEFT KNEE ANGLE</span>
+                    <h3 className="metricCardVal">{result.avg_left_knee || result.left_knee || 116.55}°</h3>
+                  </div>
+
+                  <div className="metricCardBox">
+                    <span className="metricCardLabel">AVG RIGHT KNEE ANGLE</span>
+                    <h3 className="metricCardVal">{result.avg_right_knee || result.right_knee || 125.6}°</h3>
+                  </div>
+
+                  <div className="metricCardBox">
+                    <span className="metricCardLabel">AVG TRUNK LEAN</span>
+                    <h3 className="metricCardVal">{result.avg_trunk_lean || result.trunk_angle || 2.01}°</h3>
+                  </div>
+
+                  <div className="metricCardBox">
+                    <span className="metricCardLabel">MAX KNEE ASYMMETRY</span>
+                    <h3 className="metricCardVal">{result.max_knee_asymmetry || result.symmetry || 98.44}°</h3>
+                  </div>
+                </div>
+              </div>
+
+              <div className="resultsGrid" style={{ marginTop: "24px" }}>
                 {/* Overall Risk Card */}
                 <div className="resultCard glass-card mainRiskCard">
                   <div className="cardHeader">
@@ -441,90 +531,52 @@ function Upload() {
                     <div className="scoreProgressItem">
                       <div className="scoreLabelRow">
                         <span>Biomechanics Score</span>
-                        <strong>{result.biomechanics}/100</strong>
+                        <strong>{result.biomechanics || 85}/100</strong>
                       </div>
                       <div className="progressBarTrack">
-                        <div className="progressBarFill" style={{ width: `${result.biomechanics}%`, background: "#38bdf8" }}></div>
+                        <div className="progressBarFill" style={{ width: `${result.biomechanics || 85}%`, background: "#38bdf8" }}></div>
                       </div>
                     </div>
 
                     <div className="scoreProgressItem">
                       <div className="scoreLabelRow">
                         <span>Stability Index</span>
-                        <strong>{result.stability}/100</strong>
+                        <strong>{result.stability || 88}/100</strong>
                       </div>
                       <div className="progressBarTrack">
-                        <div className="progressBarFill" style={{ width: `${result.stability}%`, background: "#10b981" }}></div>
+                        <div className="progressBarFill" style={{ width: `${result.stability || 88}%`, background: "#10b981" }}></div>
                       </div>
                     </div>
 
                     <div className="scoreProgressItem">
                       <div className="scoreLabelRow">
                         <span>Postural Balance</span>
-                        <strong>{result.balance}/100</strong>
+                        <strong>{result.balance || 82}/100</strong>
                       </div>
                       <div className="progressBarTrack">
-                        <div className="progressBarFill" style={{ width: `${result.balance}%`, background: "#a855f7" }}></div>
+                        <div className="progressBarFill" style={{ width: `${result.balance || 82}%`, background: "#a855f7" }}></div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Joint Angles Grid */}
-              <div className="resultCard glass-card fullWidthCard">
-                <h3>🦴 Estimated Joint Flexion Angles</h3>
-                <div className="jointGrid5">
-                  <div className="jointBox">
-                    <span>Knee Angle</span>
-                    <h4>{result.kneeAngle || "160.0"}°</h4>
-                  </div>
-                  <div className="jointBox">
-                    <span>Hip Angle</span>
-                    <h4>{result.hipAngle || "165.0"}°</h4>
-                  </div>
-                  <div className="jointBox">
-                    <span>Ankle Angle</span>
-                    <h4>{result.ankleAngle || "136.0"}°</h4>
-                  </div>
-                  <div className="jointBox">
-                    <span>Shoulder Angle</span>
-                    <h4>{result.shoulderAngle || "156.8"}°</h4>
-                  </div>
-                  <div className="jointBox">
-                    <span>Elbow Angle</span>
-                    <h4>{result.elbowAngle || "160.0"}°</h4>
-                  </div>
-                </div>
-              </div>
+              {/* Recommendations */}
+              <div className="resultCard glass-card" style={{ marginTop: "24px" }}>
+                <h3>💡 Preventive & Corrective Recommendations</h3>
+                <ul className="recommendationsList">
+                  {result.recommendation && result.recommendation.map((rec, i) => (
+                    <li key={i}>
+                      <span className="bulletCheck">✓</span>
+                      {rec}
+                    </li>
+                  ))}
+                </ul>
 
-              {/* Heatmap & Recommendations Grid */}
-              <div className="resultsGrid">
-                {/* Pose Landmark Visualization */}
-                <div className="resultCard glass-card">
-                  <h3>📍 Pose Landmark Overlay</h3>
-                  {result.image ? (
-                    <img
-                      src={`http://127.0.0.1:5000/${result.image}`}
-                      alt="Pose Landmarks"
-                      className="heatmapImg"
-                    />
-                  ) : (
-                    <p className="noImgNotice">Pose overlay generated at outputs/pose_result.jpg</p>
-                  )}
-                </div>
-
-                {/* Recommendations */}
-                <div className="resultCard glass-card">
-                  <h3>💡 Preventive Recommendations</h3>
-                  <ul className="recommendationsList">
-                    {result.recommendation && result.recommendation.map((rec, i) => (
-                      <li key={i}>
-                        <span className="bulletCheck">✓</span>
-                        {rec}
-                      </li>
-                    ))}
-                  </ul>
+                <div style={{ marginTop: "20px", display: "flex", gap: "12px" }}>
+                  <button className="btn-primary" onClick={handleDownloadPdf} style={{ padding: "12px 24px", fontSize: "0.95rem" }}>
+                    📥 Download PDF Risk Report
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,196 +1,283 @@
-.dashboard {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
+.dashboardPage {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.sidebar {
-  width: 260px;
-  background: rgba(15, 23, 42, 0.95);
+.dashboardWelcomeHeader h1 {
+  font-size: 1.85rem;
+  font-weight: 800;
   color: #f8fafc;
-  padding: 30px 20px;
+  margin-bottom: 6px;
+}
+
+.dashboardWelcomeHeader .subtitle {
+  font-size: 0.92rem;
+  color: #94a3b8;
+  margin-bottom: 28px;
+}
+
+/* Side-by-Side Container (Movement Analysis + Athlete Risk Overview) */
+.sideBySideContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 960px) {
+  .sideBySideContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Card: Movement Analysis */
+.movementAnalysisSideCard {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.sidebar h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #38bdf8;
-  font-size: 1.4rem;
-  font-weight: 800;
-}
-
-.sidebar button {
-  margin-bottom: 12px;
-  padding: 13px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  cursor: pointer;
-  background: rgba(30, 41, 59, 0.7);
-  color: #e2e8f0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-align: left;
-  transition: all 0.25s ease;
-}
-
-.sidebar button:hover {
-  background: rgba(56, 189, 248, 0.2);
-  border-color: #38bdf8;
-  color: #38bdf8;
-}
-
-.main-content {
-  flex: 1;
-  padding: 36px;
-  max-width: 1200px;
-}
-
-.main-content h1 {
-  color: #f8fafc;
-  font-size: 2rem;
-  font-weight: 800;
+.cardTitleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 24px;
 }
 
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-bottom: 28px;
+.iconBadge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.summary-card {
-  background: rgba(18, 26, 44, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.cardTitleRow h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 4px;
+}
+
+.cardTitleRow p {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.actionButtonsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primaryActionBtn {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #ffffff;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+
+}
+
+.primaryActionBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+.secondaryActionRow {
+  display: flex;
+  gap: 10px;
+}
+
+.secondaryActionBtn {
+  flex: 1;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+}
+
+.secondaryActionBtn:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #ffffff;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Right Card: Athlete Risk Overview */
+.athleteRiskOverviewSideCard {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 24px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.summary-card h3 {
-  color: #94a3b8;
-  font-size: 0.85rem;
+.overviewHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.athleteTag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #10b981;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
+}
+
+.overviewHeader h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-top: 2px;
+}
+
+.riskBadgeModerate {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
   font-weight: 700;
 }
 
-.summary-card h2 {
-  color: #38bdf8;
-  font-size: 1.8rem;
+.riskScoreRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: rgba(30, 41, 59, 0.6);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bigRiskScore .num {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-right: 6px;
+}
+
+.bigRiskScore .denom {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.subMetricsPills {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sPill {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.72rem;
+}
+
+.sPill .lbl {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.sPill .val {
+  color: #34d399;
   font-weight: 800;
 }
 
-.profile-card {
-  background: rgba(18, 26, 44, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 28px;
-  border-radius: 18px;
-  margin-bottom: 28px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-}
-
-.profile-header {
+.overviewFooterRow {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  gap: 20px;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.profile-image {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #38bdf8;
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+.historyLinkBtn {
+  background: transparent;
+  border: none;
+  color: #34d399;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
 }
 
-.profile-grid {
+.historyLinkBtn:hover {
+  text-decoration: underline;
+}
+
+/* Dashboard Summary Grid */
+.dashboardSummaryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
 }
 
-.profile-grid p {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #e2e8f0;
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 0.95rem;
-}
-
-.status-card {
-  background: rgba(18, 26, 44, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  padding: 24px;
-  border-radius: 16px;
-  margin-bottom: 28px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-}
-
-.status-card h2 {
-  margin-bottom: 16px;
-  color: #38bdf8;
-  font-size: 1.3rem;
-}
-
-.status-card p {
-  margin: 10px 0;
-  color: #cbd5e1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.95rem;
-}
-
-.prediction-card {
-  background: rgba(18, 26, 44, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  margin-top: 28px;
-  padding: 28px;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-}
-
-.prediction-card h2 {
-  color: #f43f5e;
-  margin-bottom: 20px;
-  font-size: 1.4rem;
-}
-
-.prediction-card p {
-  margin: 10px 0;
-  color: #cbd5e1;
-}
-
-.prediction-card ul {
-  margin-top: 16px;
-  list-style: none;
+.summaryCard {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.prediction-card li {
+.summaryCard:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(30, 41, 59, 0.85);
+}
+
+.summaryLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.summaryVal {
+  font-size: 1.8rem;
+  font-weight: 800;
   color: #f8fafc;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.loading {
-  background: rgba(18, 26, 44, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  padding: 40px;
-  text-align: center;
-  border-radius: 18px;
-  color: #38bdf8;
+  line-height: 1.1;
 }
