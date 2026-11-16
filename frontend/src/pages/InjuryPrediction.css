@@ -310,4 +310,73 @@
   font-size: 1.05rem;
 }
 
+/* ============================================================
+   PRINT / PDF EXPORT STYLES (MILESTONE 4)
+   ============================================================ */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .injury-prediction-page {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+  }
+
+  .back-btn,
+  .refresh-btn,
+  .print-report-btn,
+  nav,
+  header {
+    display: none !important;
+  }
+
+  .hero-risk-banner,
+  .reportHeaderCard,
+  .movementQualityCard,
+  .clinical-description-card,
+  .biomechanicalMetricsCard,
+  .glass-card {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    page-break-inside: avoid;
+  }
+
+  .primary-zone-val,
+  .mqScoreVal,
+  .scoreBig,
+  .desc-box h4 {
+    color: #0f172a !important;
+  }
+
+  .desc-box {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  .desc-box p,
+  .desc-box strong {
+    color: #1e293b !important;
+  }
+
+  .clinical-summary-banner {
+    background: #fef2f2 !important;
+    border: 1px solid #fca5a5 !important;
+  }
+
+  .clinical-summary-banner h4 {
+    color: #991b1b !important;
+  }
+
+  .clinical-summary-banner p {
+    color: #7f1d1d !important;
+  }
+}
+
+
 

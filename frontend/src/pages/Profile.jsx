@@ -45,6 +45,17 @@ function Profile() {
   const [athletesList, setAthletesList] = useState([
     {
       athleteId: "ATH001",
+      name: "Kousalya Venkata Sai Lakshmi",
+      sport: "Football",
+      position: "Defensive Midfielder",
+      age: "22",
+      height: "168",
+      weight: "58",
+      injury: "None",
+      trainingLoad: "Medium"
+    },
+    {
+      athleteId: "ATH002",
       name: "Kiruthi Varshni",
       sport: "Cricket",
       position: "Cricketer",
@@ -53,17 +64,6 @@ function Profile() {
       weight: "60",
       injury: "None",
       trainingLoad: "Medium"
-    },
-    {
-      athleteId: "ATH002",
-      name: "Virat Kohli",
-      sport: "Cricket",
-      position: "Batsman",
-      age: "36",
-      height: "175",
-      weight: "72",
-      injury: "Lower back strain (2022)",
-      trainingLoad: "High"
     }
   ]);
 
@@ -105,6 +105,33 @@ function Profile() {
     setAthletesList(updated);
     localStorage.setItem("registered_athletes_list", JSON.stringify(updated));
     localStorage.setItem("athlete_profile", JSON.stringify(newAth));
+  };
+
+  const handleDeleteAthlete = async (athToDelete, indexToDelete) => {
+    const athName = athToDelete.name || athToDelete.athleteId || "Athlete";
+    const athId = athToDelete.athleteId || "";
+
+    if (!window.confirm(`Are you sure you want to delete profile for "${athName}"?`)) {
+      return;
+    }
+
+    const updatedList = athletesList.filter((ath, idx) => {
+      if (athId && ath.athleteId) {
+        return ath.athleteId !== athId;
+      }
+      return idx !== indexToDelete;
+    });
+
+    setAthletesList(updatedList);
+    localStorage.setItem("registered_athletes_list", JSON.stringify(updatedList));
+
+    if (athId) {
+      try {
+        await fetch(`http://127.0.0.1:5000/delete_athlete/${encodeURIComponent(athId)}`, {
+          method: "DELETE",
+        });
+      } catch (e) {}
+    }
   };
 
 
@@ -584,15 +611,34 @@ function Profile() {
                     </span>
                   </td>
                   <td>
-                    <button
-                      className="selectAthBtn"
-                      onClick={() => {
-                        localStorage.setItem("athlete_profile", JSON.stringify(ath));
-                        alert(`Selected active athlete: ${ath.name}`);
-                      }}
-                    >
-                      Select
-                    </button>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                      <button
+                        className="selectAthBtn"
+                        onClick={() => {
+                          localStorage.setItem("athlete_profile", JSON.stringify(ath));
+                          alert(`Selected active athlete: ${ath.name}`);
+                        }}
+                      >
+                        Select
+                      </button>
+                      <button
+                        className="deleteAthBtn"
+                        onClick={() => handleDeleteAthlete(ath, idx)}
+                        style={{
+                          background: "rgba(244, 63, 94, 0.18)",
+                          color: "#fb7185",
+                          border: "1px solid rgba(244, 63, 94, 0.4)",
+                          padding: "6px 12px",
+                          borderRadius: "8px",
+                          fontSize: "0.85rem",
+                          fontWeight: "700",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

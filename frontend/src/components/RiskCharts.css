@@ -1,0 +1,201 @@
+/* ============================================================
+   RISK & REPORT CHARTS (BAR CHARTS & PIE CHARTS)
+   ============================================================ */
+
+.barChartWidgetCard {
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  margin-top: 20px;
+}
+
+.chartWidgetTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 20px;
+}
+
+.barChartSvgContainer {
+  display: flex;
+  height: 220px;
+  gap: 12px;
+  position: relative;
+  margin-top: 10px;
+}
+
+.yAxisTicks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-family: monospace;
+  font-weight: 700;
+  width: 40px;
+  text-align: right;
+  padding-right: 6px;
+}
+
+.barGridArea {
+  flex: 1;
+  position: relative;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gridLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.barsFlexRow {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 100%;
+  padding: 0 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.barColItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  width: 16%;
+}
+
+.barTrack {
+  width: 100%;
+  max-width: 64px;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.barFill {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.barHoverVal {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  font-family: monospace;
+}
+
+.barFill:hover .barHoverVal {
+  opacity: 1;
+}
+
+.barLabelText {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin-top: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* PIE CHART STYLES */
+.pieChartWidgetCard {
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pieHeader {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.pieHeader h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.pieSub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.pieVisualContainer {
+  width: 160px;
+  height: 160px;
+  margin: 8px 0 16px;
+}
+
+.pieSvg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.pieSlice {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transform-origin: 100px 100px;
+  cursor: pointer;
+}
+
+.pieSlice:hover {
+  transform: scale(1.04);
+  opacity: 0.9;
+}
+
+.pieLegendGrid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendText {
+  flex: 1;
+}
+
+.legendText strong {
+  color: #ffffff;
+}
